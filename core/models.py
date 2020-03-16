@@ -35,3 +35,22 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'email'
 
+class Team(models.Model):
+    name = models.CharField(max_length=255)
+    origin = models.CharField(max_length=255)
+    league = models.CharField(max_length=255)
+
+class Bet(models.Model):
+    home_team = models.ForeignKey(Team, null=True, on_delete=models.SET_NULL,)
+    away_team = models.CharField(max_length=255)
+    prediction = models.CharField(max_length=255)
+
+class BetSlip(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+    bet = models.ManyToManyField('Bet')
+    stake = models.FloatField()
+
+
